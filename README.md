@@ -1,3 +1,9 @@
+
+
+In order to test my solution you need to install the fs package. Then once the server is started go to the account page. I added Make Key and File upload sections. 
+
+I wasn't able to complete the encryption part of the challenge. I created keys using DiffieHellman, but then when I tried to use them to encrypt I got an error because the key wasn't PEM encoded. If I were to do the challenge again I would look for a different library than crypto. I tried to use ursa originally, but I was unable to install it.
+
 Challenge Server
 =======================
 
