@@ -119,6 +119,81 @@ exports.getAccount = (req, res) => {
 };
 
 /**
+ * GET /account/key
+ * Profile page.
+ */
+exports.getKey = (req, res,next) => {
+  console.log("get key!");
+  User.findById(req.user.id, (err, user) => {
+    if (err) { return next(err); }
+
+      console.log(user.publicKey);
+       res.set({"Content-Disposition":"attachment; filename=publicKey.txt"});
+       if (user.keyDownloaded){
+        res.send("Key already downloaded");
+       } else {
+              res.send(user.publicKey);
+            }
+      user.keyDownloaded = true;
+    user.save((err) => {
+      if (err) {
+        if (err.code === 11000) {
+          req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
+          return res.redirect('/account');
+        }
+        return next(err);
+      }
+
+      // res.redirect('/account');
+    });
+  });
+};
+
+/**
+ * POST /account/makeKey
+ * make key.
+ */
+exports.makeKey = (req, res,next) => {
+
+
+  var prime_length = 60;
+var diffHell = crypto.createDiffieHellman(prime_length);
+
+diffHell.generateKeys('base64');
+var publicKey = diffHell.getPublicKey('base64');
+var privateKey = diffHell.getPrivateKey('base64');
+console.log("Public Key : " ,publicKey);
+console.log("Private Key : " ,privateKey);
+
+  User.findById(req.user.id, (err, user) => {
+    if (err) { return next(err); }
+    console.log(user.email);
+    console.log(user.publicKey);
+    user.publicKey = publicKey;
+    user.keyDownloaded = false;
+    user.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      console.log(user.publicKey);
+      req.flash('success', { msg: 'Key created' });
+      res.redirect('/account');
+    });
+  });
+};
+
+/**
+ * POST /account/encrypt
+ * make key.
+ */
+exports.encrypt = (req, res,next) => {
+
+  console.log(req.file);
+  console.log(req.body);
+  res.redirect('/account');
+};
+
+/**
  * POST /account/profile
  * Update profile information.
  */

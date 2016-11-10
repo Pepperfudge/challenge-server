@@ -45,6 +45,34 @@ block content
           | Update Profile
 
   .page-header
+    h3 Make Key
+    user.publicKey
+
+  a.btn.btn-default(href='/account/key', role='button') download public key »
+    
+  form.form-horizontal(action='/account/makeKey', method='POST', enctype= "multipart/form-data")
+    .form-group
+      p.col-sm-offset-3.col-sm-4 Make a key pair
+      input(type='hidden', name='_csrf', value=_csrf)
+      .col-sm-offset-3.col-sm-4
+        button.btn.btn-primary(type='submit')
+          i.fa.fa-lock
+          | Make a key
+
+
+
+  h3 File Upload Form
+  .row
+    .col-sm-6
+      p All files will be uploaded to "/uploads" directory.
+      form(role='form', enctype='multipart/form-data', method='POST', action = '/api/upload')
+        .form-group
+          label.control-label File Input
+          input(type='file', name='myFile')
+        button.btn.btn-primary(type='submit') Submit
+
+
+  .page-header
     h3 Change Password
 
   form.form-horizontal(action='/account/password', method='POST')
@@ -66,7 +94,7 @@ block content
   .page-header
     h3 Delete Account
 
-  form.form-horizontal(action='/account/delete', method='POST')
+  form.form-horizontal(action='/account/makeKey', method='POST')
     .form-group
       p.col-sm-offset-3.col-sm-4 You can delete your account, but keep in mind this action is irreversible.
       input(type='hidden', name='_csrf', value=_csrf)

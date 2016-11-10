@@ -1,6 +1,7 @@
 'use strict';
 const _ = require('lodash');
 const async = require('async');
+const User = require('../models/User');
 const validator = require('validator');
 const request = require('request');
 const cheerio = require('cheerio');
@@ -583,14 +584,20 @@ exports.getLob = (req, res, next) => {
  */
  
 exports.getFileUpload = (req, res, next) => {
+
   res.render('api/upload', {
     title: 'File Upload'
   });
 };
 
 exports.postFileUpload = (req, res, next) => {
-  req.flash('success', { msg: 'File was uploaded successfully.' });
-  res.redirect('/api/upload');
+
+  var fs = require('fs');
+  var toEncrypt = fs.readFileSync(req.file.path, "utf8");
+
+    req.flash('success', { msg: 'File was uploaded successfully.' });
+  res.redirect('/account');
+
 };
 
 /**
